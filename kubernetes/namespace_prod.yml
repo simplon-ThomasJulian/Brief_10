@@ -1,0 +1,7 @@
+# Set the API version
+apiVersion: v1
+# Create a namespace
+kind: Namespace
+metadata:
+  # The name of the namespace
+  name: prod

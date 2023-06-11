@@ -1,0 +1,26 @@
+serverFiles:
+  
+  ## Alerts configuration
+  ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+  alerting_rules.yml:
+    groups:
+      - name: pod restarted
+        rules:
+        - alert: PodRestarted
+          expr: kube_pod_container_status_restarts_total < 1
+          for: 0s
+          labels:
+            severity: High
+          annotations:
+            summary: Pod restarted
+
+      - name: kube_node_status_conditionals
+        rules:
+        - alert: KubernetesNodeReady
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Node ready (instance {{ $labels.instance }})
+            description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
